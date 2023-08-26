@@ -35,6 +35,7 @@ const debtsHouseSchema = new mongoose.Schema({
     default: 0,
   },
   products: [productSchema],
+  
 });
 
 debtsHouseSchema.methods.updateDebtsAndRemaining = async function () {

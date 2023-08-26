@@ -24,9 +24,5 @@ const productSchema = new mongoose.Schema({
    },
    );
 
-   productSchema.pre("save",function(next){
-    this.totalPrice = this.price * this.quantity
-    next()
-  })
 
   module.exports = productSchema;

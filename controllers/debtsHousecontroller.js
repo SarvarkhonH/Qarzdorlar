@@ -1,12 +1,12 @@
 const { debtsHouse } = require("../models/debtsHouseModels");
 
-exports.getalldebts = async (req,res) =>{
+exports.getalldebts = async (req, res) => {
   try {
     const allDebts = await debtsHouse.find();
     res.status(200).json({
       status: "succes",
       data: {
-        allDebts
+        allDebts,
       },
     });
   } catch (error) {
@@ -15,12 +15,21 @@ exports.getalldebts = async (req,res) =>{
       message: error.message,
     });
   }
-}
+};
+
 exports.createdebts = async (req, res) => {
   try {
-
-    const newDebts = await debtsHouse.create(req.body);
- 
+    console.log(req.body)
+    let payment = []
+    const newDebts = await debtsHouse.create({
+      name: req.body.name,
+      address: req.body.address,
+      phoneNumber: req.body.phoneNumber,
+      reminder: req.body.reminder,
+      products: req.body.products,
+      totalPrice: req.body.totalPrice,
+      payment: [{ payment: req.body.payment, time: Date.now() }],
+    });
 
     res.status(201).json({
       status: "succes",
@@ -35,27 +44,30 @@ exports.createdebts = async (req, res) => {
     });
   }
 };
-exports.updatedebts = async(req,res) => {
+
+exports.updatedebts = async (req, res) => {
   try {
-    const searchByNumber = req.body.phoneNumber
-    const foundedData = await debtsHouse.findOne({ phoneNumber: searchByNumber })
+    const searchByNumber = req.body.phoneNumber;
+    const foundedData = await debtsHouse.findOne({
+      phoneNumber: searchByNumber,
+    });
     if (!foundedData) {
       return res.status(404).json({
         status: "fail",
-        message: "Ushbu raqamga tegishli mijoz malumotlar bazasida mavjud emas.",
+        message:
+          "Ushbu raqamga tegishli mijoz malumotlar bazasida mavjud emas.",
       });
     }
-    if(req.body.products){
-       foundedData.products.push(req.body.products[0]);
-       await foundedData.save();
-       await foundedData.updateDebtsAndRemaining();
-    } else if(req.body.payment){
-       foundedData.payment.push({payment: req.body.payment, time: Date.now()})
-       await foundedData.save()
-       await foundedData.updateDebtsAndRemaining();
+    if (req.body.products) {
+      foundedData.products.push(req.body.products[0]);
+      await foundedData.save();
+      await foundedData.updateDebtsAndRemaining();
+    } else if (req.body.payment) {
+      foundedData.payment.push({ payment: req.body.payment, time: Date.now() });
+      await foundedData.save();
+      await foundedData.updateDebtsAndRemaining();
     }
-   
-    
+
     res.status(202).json({
       status: "succes",
       data: {
@@ -68,13 +80,13 @@ exports.updatedebts = async(req,res) => {
       message: error.message,
     });
   }
-}
+};
 
 // exports.addpayment =async(req,res) => {
 //   try {
 //     const searchByNumber = req.body.phoneNumber
 //     const foundedData = await debtsHouse.findOne({ phoneNumber: searchByNumber })
-  
+
 //       if (!foundedData) {
 //         return res.status(404).json({
 //           status: "fail",
@@ -91,7 +103,5 @@ exports.updatedebts = async(req,res) => {
 //        message: error.message,
 //     });
 //   }
- 
 
 // }
- 

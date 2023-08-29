@@ -13,10 +13,7 @@ const debtsHouseSchema = new mongoose.Schema({
     type: String,
     required: [true, `mijoz yashaydigan mahala kiritilishi kerak`],
   },
-  phoneNumber: {
-    type: String,
-    required: [true, `mijozning telefon raqami kiritlishi kerak`],
-  },
+  phoneNumber: String,
   time: {
     type: Date,
     default: Date.now(),

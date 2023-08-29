@@ -3,11 +3,6 @@ const productSchema = new mongoose.Schema({
     name: {
        type: String,
      },
-     unit: {
-       type: String,
-       enum: ["kg", "dona"],
-       required: [true, `maxsulot o'lchovini kiritish kerak`],
-     },
      price: {
        type: Number,
      },

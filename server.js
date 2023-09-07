@@ -4,14 +4,13 @@ const dotenv = require('dotenv')
 dotenv.config({path: './config.env'});
 const app = require("./app");
 
-
-const DB =
-"mongodb+srv://sarvarxonhabibov:uTGNhKUatqIfdqDm@cluster0.hjrfadc.mongodb.net/chat"
+const DB = process.env.DATABASE.replace('<PASSWORD>',process.env.DATABASE_PASSWORD)
 
 mongoose
   .connect(DB, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+   
   })
   .then(() => console.log("DB connection succesfull"));
   app.listen( process.env.PORT, () => {

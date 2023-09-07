@@ -1,28 +1,38 @@
-const mongoose = require('mongoose');
-const validator = require('validator');
-const bcrypt = require('bcryptjs');
+const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-    "name":{
-        type: String,
-        required:[true,'Iltimos ismingizni kiriting']
-    },
-    "password":{
-        type: String,
-        required: [true,'Iltimos parol yarating'],
-        minlength: 8,
-        select: false,
-    },
-    "passwordConfirm":{
-        type: String,
-        required:[true,`Iltimos hozirgina qo'ygan parolizni bu yerga ham yozing`],
-        validate: {
-            validator: function (val) {
-              return val === this.password;
-            },
-            message: 'Iltimos tepaga va pasga bir xil parol yozing',
-          },
-    }
-})
+  name: {
+    type: String,
+    required: [true, "dukon egasi kirgizilishi kerak"],
+  },
+  phoneNumber: {
+    type: String,
+    required: [true, "Iltimos telefon raqamizni kiriting"],
+    unique: true,
+  },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
+  generatedOTP: {
+    type: Number,
+    required: true,
+  },
+  active: {
+    type: Boolean,
+    default:true
+  },
+
+  // subscriptionPaid: {
+  //   type: Boolean,
+  //   default: false, // Set to true when the user has an active subscription
+  // },
+  // lastPaymentDate: {
+  //   type: Date, // Store the date of the last payment
+  // },
+
+  alldebts: [{ type: mongoose.Schema.ObjectId, ref: 'debtsHouse' }]
+});
+
 
 exports.user = mongoose.model("userSchema",userSchema)

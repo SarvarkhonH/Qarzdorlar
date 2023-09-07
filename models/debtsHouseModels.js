@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
-const calculateDebtsAndRemaining = require("../utils/debtsCalculator");
 
-const productSchema = require("./productModels");
-const paymentSchema = require("./paymentModels");
+const transactionsSchema = require("./transactionModels");
 
 const debtsHouseSchema = new mongoose.Schema({
   name: {
@@ -13,37 +11,44 @@ const debtsHouseSchema = new mongoose.Schema({
     type: String,
     required: [true, `mijoz yashaydigan mahala kiritilishi kerak`],
   },
-  phoneNumber: String,
+
+  phoneNumber: {
+    type: String,
+    required: [true, `mijozning telefon raqamini kirgizing`],
+  },
+
   time: {
     type: Date,
     default: Date.now(),
   },
   reminder: {
     type: Date,
-    required: [true,'Mijozni qarzni qaytarish vaxtini kirgizish kerak']
   },
-  payment:[paymentSchema],
-  debts: {
+  reminderDays: {
     type: Number,
-    default: 0,
   },
+  transactions: [transactionsSchema],
   remain: {
     type: Number,
-    default: 0,
   },
-  products: [productSchema],
-  
 });
 
-debtsHouseSchema.methods.updateDebtsAndRemaining = async function () {
-  try {
-    const { debts, remain } = calculateDebtsAndRemaining(this.products, this.payment);
-    this.debts = debts;
-    this.remain = remain;
-    await this.save();
-  } catch (error) {
-    throw error;
-  }
-};
+debtsHouseSchema.pre("save", function (next) {
+  if (this.isNew && this.reminderDays) {
+    const newReminderDate = new Date();
+    newReminderDate.setDate(newReminderDate.getDate() + this.reminderDays);
 
-exports.debtsHouse = mongoose.model("debtsHouse", debtsHouseSchema);
+    this.reminder = newReminderDate;
+  }
+
+  next();
+});
+
+debtsHouseSchema.index(
+  { name: "text", address: "text", phoneNumber: "text" },
+  { default_language: "en" }
+);
+
+
+
+exports.debtsHouse = mongoose.model('debtsHouse',debtsHouseSchema)

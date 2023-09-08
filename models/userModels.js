@@ -22,7 +22,10 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default:true
   },
-
+  
+  servicfee: {
+    type:Number,
+  },
   // subscriptionPaid: {
   //   type: Boolean,
   //   default: false, // Set to true when the user has an active subscription

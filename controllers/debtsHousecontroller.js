@@ -1,8 +1,5 @@
 const { debtsHouse } = require("../models/debtsHouseModels");
 
-
-
-
 const projection = {
   name: 1, // Include 'name' field
   address: 1, // Include 'address' field
@@ -26,8 +23,25 @@ exports.getalldebts = async (req, res) => {
       remain: queryStr.remain,
     };
 
-    // Execute the query
-    const allDebts = await debtsHouse.find(query, projection);
+    const pipeline = [
+      { $match: query }, // Match documents based on your query conditions
+      { $unwind: "$transactions" }, // Unwind the transactions array
+      {
+        $sort: {
+          "transactions.object.time": -1, // Sort in descending order of time
+        },
+      },
+      {
+        $group: {
+          _id: "$_id", // Group by the debt's ID
+          data: { $first: "$$ROOT" }, // Keep the first document (which has the latest transaction)
+        },
+      },
+      { $replaceRoot: { newRoot: "$data" } }, // Replace the root with the selected document
+    ];
+
+    // Execute the aggregation pipeline
+    const allDebts = await debtsHouse.aggregate(pipeline).project(projection);
 
     res.status(200).json({
       status: "success",
@@ -42,6 +56,11 @@ exports.getalldebts = async (req, res) => {
     });
   }
 };
+
+
+
+
+
 
 exports.UserDebts = async (req, res) => {
   try {

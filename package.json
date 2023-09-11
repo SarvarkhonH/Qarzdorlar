@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@firebase/app-check": "^0.8.0",
     "aws-sdk": "^2.1450.0",
     "axios": "^1.5.0",
     "bcrypt": "^5.1.1",
@@ -35,6 +36,7 @@
     "xss-clean": "^0.1.4"
   },
   "devDependencies": {
+    "compress-images": "^2.0.5",
     "eslint": "^8.48.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^9.0.0",

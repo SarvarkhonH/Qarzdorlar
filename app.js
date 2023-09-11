@@ -15,7 +15,7 @@ app.use(helmet())
 
 
 const debtsHouse = require(`./routes/debtsHouseRoute`);
-const imageUpload =  require('./routes/imageRoute');
+
 
 const limiter = rateLimit({
   max: 250,
@@ -34,7 +34,7 @@ app.use(mongoSanitize())
 app.use(xss())
 
 // Routes
-app.use(`/api/v1/debtshouse`, debtsHouse,imageUpload);
+app.use(`/api/v1/debtshouse`, debtsHouse);
 
 
 app.all('*', (req, res, next) => {

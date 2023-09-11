@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const productSchema = require("./productModels");
 
-transactionsSchema = new mongoose.Schema({
+const transactionsSchema = new mongoose.Schema({
   amount: {
     type: Number,
     default: 0,
@@ -11,7 +11,9 @@ transactionsSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-
+  imageUrl: {
+    type: String,
+  },
   products: [productSchema],
 });
 

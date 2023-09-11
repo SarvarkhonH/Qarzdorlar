@@ -1,35 +1,3 @@
-// const AppError = require('./../utils/appError');
-
-// const handleDuplicateKeyError = err => {
-//   if (err.keyValue && err.keyValue.phoneNumber) {
-//     const message = `Bu raqam oldin ro'yxatdan o'tgan`;
-//     return new AppError(message, 500);
-//   }
-//   // If it's not a phoneNumber duplicate error, you can handle other cases here
-//   return new AppError('Duplicate field value. Please use another value!', 400);
-// };
-
-// module.exports = (err, req, res, next) => {
-//   err.statusCode = err.statusCode || 500;
-//   err.status = err.status || 'error';
-
-//   if (err.code === 11000 && err.keyPattern && err.keyPattern.phoneNumber === 1) {
-//     const customError = handleDuplicateKeyError(err);
-//     return res.status(customError.statusCode).json({
-//       status: customError.status,
-//       message: customError.message,
-//     });
-//   }
-
-//   // For other errors, use the default error handling
-//   res.status(err.statusCode).json({
-//     status: err.status,
-//     error: err,
-//     message: err.message,
-//     stack: err.stack,
-//   });
-// };
-
 const AppError = require("../utils/appError");
 
 const handleCastErrorDB = err => {

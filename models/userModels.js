@@ -26,13 +26,6 @@ const userSchema = new mongoose.Schema({
   servicfee: {
     type:Number,
   },
-  // subscriptionPaid: {
-  //   type: Boolean,
-  //   default: false, // Set to true when the user has an active subscription
-  // },
-  // lastPaymentDate: {
-  //   type: Date, // Store the date of the last payment
-  // },
 
   alldebts: [{ type: mongoose.Schema.ObjectId, ref: 'debtsHouse' }]
 });

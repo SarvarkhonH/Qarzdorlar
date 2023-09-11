@@ -24,25 +24,13 @@ const debtsHouseSchema = new mongoose.Schema({
   reminder: {
     type: Date,
   },
-  reminderDays: {
-    type: Number,
-  },
   transactions: [transactionsSchema],
   remain: {
     type: Number,
   },
 });
 
-debtsHouseSchema.pre("save", function (next) {
-  if (this.isNew && this.reminderDays) {
-    const newReminderDate = new Date();
-    newReminderDate.setDate(newReminderDate.getDate() + this.reminderDays);
 
-    this.reminder = newReminderDate;
-  }
-
-  next();
-});
 
 debtsHouseSchema.index(
   { name: "text", address: "text", phoneNumber: "text" },

@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const productSchema = require("./productModels");
 
 const transactionsSchema = new mongoose.Schema({
   amount: {
@@ -14,7 +13,24 @@ const transactionsSchema = new mongoose.Schema({
   imageUrl: {
     type: String,
   },
-  products: [productSchema],
+  products: [{
+    name: {
+       type: String,
+     },
+     price: {
+       type: Number,
+     },
+     quantity: {
+       type: Number,
+     },
+     totalPrice: {
+       type: Number
+     }
+   }],
+   
+   serviceFee: {
+    type: Number,
+   }
 });
 
 module.exports = transactionsSchema;

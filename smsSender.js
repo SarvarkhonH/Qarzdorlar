@@ -12,11 +12,12 @@ const sendOTP = async (phoneNumber, otp) => {
       },
     ],
   };
+  
   const headers = {
     'Content-Type': 'application/json',
     'Authorization': `App ${process.env.APIKEY}`,
   };
-
+  
   try {
     const response = await axios.post(url, requestBody, { headers });
     return response.data;

@@ -4,41 +4,42 @@ const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const xss = require('xss-clean');
 const mongoSanitize = require('express-mongo-sanitize');
+const morgan = require('morgan');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 
 const app = express();
-const morgan = require('morgan');
-// Create a custom response logging middleware
-function responseLogger(req, res, next) {
-  const oldWrite = res.write;
-  const oldEnd = res.end;
 
-  const chunks = [];
+// function responseLogger(req, res, next) {
+//   const oldWrite = res.write;
+//   const oldEnd = res.end;
 
-  // Override res.write to capture response data
-  res.write = function (chunk) {
-    chunks.push(Buffer.from(chunk));
-    oldWrite.apply(res, arguments);
-  };
+//   const chunks = [];
 
-  // Override res.end to capture response data and log
-  res.end = function (chunk) {
-    if (chunk) {
-      chunks.push(Buffer.from(chunk));
-    }
+//   // Override res.write to capture response data
+//   res.write = function (chunk) {
+//     chunks.push(Buffer.from(chunk));
+//     oldWrite.apply(res, arguments);
+//   };
 
-    const responseBody = Buffer.concat(chunks).toString('utf8');
-    oldEnd.apply(res, arguments);
-  };
+//   // Override res.end to capture response data and log
+//   res.end = function (chunk) {
+//     if (chunk) {
+//       chunks.push(Buffer.from(chunk));
+//     }
 
-  next();
-}
+//     const responseBody = Buffer.concat(chunks).toString('utf8');
+//     oldEnd.apply(res, arguments);
+//   };
+
+//   next();
+// }
 
 // Use the custom response logger middleware
-app.use(responseLogger);
+// app.use(responseLogger);
 
 app.use(cors());
+
 app.use(express.json());
 // Set security HTTP headers
 app.use(helmet());

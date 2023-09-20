@@ -8,13 +8,13 @@ const AppError = require('../utils/appError');
 const checkAndUpdateSubscription = async (currentUser) => {
   const currentDate = new Date();
 
-  // Check if the user has a trial and if it has expired
+
   if (currentUser.hasTrial && currentUser.endDate <= currentDate) {
     currentUser.hasTrial = false;
     currentUser.hasSubscribed = true;
   }
 
-  // Check if the user has a subscription and if it has expired
+
   if (
     currentUser.hasSubscribed &&
     currentUser.subscriptionendDate <= currentDate
@@ -23,7 +23,7 @@ const checkAndUpdateSubscription = async (currentUser) => {
     currentUser.access = false;
   }
 
-  // Save the updated user document
+ 
   await currentUser.save();
 };
 // 6 xonali raqam generatsiya qilib beradi
@@ -111,7 +111,6 @@ exports.verifyOTP = async (req, res) => {
 };
 
 exports.protect = catchAsync(async (req, res, next) => {
-  console.log(req.body);
   let token;
   if (
     req.headers.authorization &&
@@ -126,10 +125,10 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
   }
 
-  // 2) Verification token
+  
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
-  // 3) Check if user still exists
+
   const currentUser = await user.findById(decoded.id);
   if (!currentUser) {
     return next(
@@ -145,20 +144,17 @@ exports.protect = catchAsync(async (req, res, next) => {
 
     const qarzdor = await user.findById(currentUser);
     const payment = qarzdor.serviceFee;
-    // if (!currentUser.access) {
-    //   console.log('access test');
-    //   return next(new AppError("Dasturdan foydalanish uchun to'lov qiling", 403));
-    // }
+  
     if (!currentUser.access) {
-      // Include the payment amount in the error message
+
       const errorMessage = `Dasturdan foydalanish uchun to'lov qiling. Payment amount: $" + ${payment}`;
 
-      // Return the error response with the payment amount
+
       return next(new AppError(errorMessage, 403));
     }
   }
 
-  // GRANT ACCESS TO PROTECTED ROUTE
+  // Ruxsat
   req.user = currentUser;
 
   next();

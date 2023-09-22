@@ -43,18 +43,6 @@ debtsHouseSchema.pre('save', function (next) {
   next();
 });
 
-// debtsHouseSchema.pre('save', function (next) {
-//   let totalServiceFee = 0;
-//   this.transactions.forEach((transaction) => {
-//     if (transaction.serviceFee) {
-//       totalServiceFee += transaction.serviceFee;
-//     }
-//   });
-
-//   this.serviceFee = totalServiceFee;
-//   next();
-// });
-
 debtsHouseSchema.index(
   { name: 'text', address: 'text', phoneNumber: 'text' },
   { default_language: 'en' },

@@ -10,34 +10,6 @@ const globalErrorHandler = require('./controllers/errorController');
 
 const app = express();
 
-// function responseLogger(req, res, next) {
-//   const oldWrite = res.write;
-//   const oldEnd = res.end;
-
-//   const chunks = [];
-
-//   // Override res.write to capture response data
-//   res.write = function (chunk) {
-//     chunks.push(Buffer.from(chunk));
-//     oldWrite.apply(res, arguments);
-//   };
-
-//   // Override res.end to capture response data and log
-//   res.end = function (chunk) {
-//     if (chunk) {
-//       chunks.push(Buffer.from(chunk));
-//     }
-
-//     const responseBody = Buffer.concat(chunks).toString('utf8');
-//     oldEnd.apply(res, arguments);
-//   };
-
-//   next();
-// }
-
-// Use the custom response logger middleware
-// app.use(responseLogger);
-
 app.use(cors());
 
 app.use(express.json());
@@ -45,6 +17,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(morgan('combined'));
 const debtsHouse = require(`./routes/debtsHouseRoute`);
+const imageUpload = require('./routes/imageRoute');
 
 const limiter = rateLimit({
   max: 250,
@@ -63,6 +36,7 @@ app.use(mongoSanitize());
 app.use(xss());
 // Router
 app.use(`/api/v1/debtshouse`, debtsHouse);
+app.use(`/api/v1/debtshouse`, debtsHouse, imageUpload);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

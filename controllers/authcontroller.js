@@ -8,12 +8,10 @@ const AppError = require('../utils/appError');
 const checkAndUpdateSubscription = async (currentUser) => {
   const currentDate = new Date();
 
-
   if (currentUser.hasTrial && currentUser.endDate <= currentDate) {
     currentUser.hasTrial = false;
     currentUser.hasSubscribed = true;
   }
-
 
   if (
     currentUser.hasSubscribed &&
@@ -23,7 +21,6 @@ const checkAndUpdateSubscription = async (currentUser) => {
     currentUser.access = false;
   }
 
- 
   await currentUser.save();
 };
 // 6 xonali raqam generatsiya qilib beradi
@@ -125,9 +122,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
   }
 
-  
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-
 
   const currentUser = await user.findById(decoded.id);
   if (!currentUser) {
@@ -144,16 +139,13 @@ exports.protect = catchAsync(async (req, res, next) => {
 
     const qarzdor = await user.findById(currentUser);
     const payment = qarzdor.serviceFee;
-  
+
     if (!currentUser.access) {
-
       const errorMessage = `Dasturdan foydalanish uchun to'lov qiling. Payment amount: $" + ${payment}`;
-
 
       return next(new AppError(errorMessage, 403));
     }
   }
-
   // Ruxsat
   req.user = currentUser;
 

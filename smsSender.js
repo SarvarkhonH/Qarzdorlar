@@ -5,7 +5,6 @@ const axios = require('axios');
 dotenv.config({ path: './config.env' });
 
 async function sendOTP(phoneNumber, otp) {
-  console.log(phoneNumber);
   const message = `Qarzdorlar ilovasiga kirish uchun kod raqamingiz: ${otp}`;
 
   const url = 'https://notify.eskiz.uz/api/message/sms/send'; // Use the correct protocol (https) here
@@ -32,11 +31,9 @@ async function sendOTP(phoneNumber, otp) {
       },
     );
 
-    console.log(response.data);
-
     return response.data;
   } catch (error) {
-    console.error(error.message);
+    throw error.response?.data || error.message;
   }
 }
 

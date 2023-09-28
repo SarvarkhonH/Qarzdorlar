@@ -58,9 +58,9 @@ exports.login = async (req, res) => {
 
       existingUser.generatedOTP = newOTP;
       existingUser.save();
-      console.log('61 LOGIN');
+
       const response = await sendOTP(phoneNumber, newOTP);
-      console.log({ response });
+
       if (response) {
         res.status(200).json({
           phoneNumber,

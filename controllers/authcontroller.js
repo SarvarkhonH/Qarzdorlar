@@ -52,12 +52,16 @@ exports.login = async (req, res) => {
   try {
     const { phoneNumber } = req.body;
     const existingUser = await user.findOne({ phoneNumber });
+
     if (existingUser) {
       const newOTP = OTPgenerator();
+
       existingUser.generatedOTP = newOTP;
       existingUser.save();
-
-      if (await sendOTP(phoneNumber, newOTP)) {
+      console.log('61 LOGIN');
+      const response = await sendOTP(phoneNumber, newOTP);
+      console.log({ response });
+      if (response) {
         res.status(200).json({
           phoneNumber,
           status: 'success',
